@@ -1,0 +1,10 @@
+C:\Users\bdas\source\repos\EncReader\EncReader\bin\Debug\EncReader.exe.config
+C:\Users\bdas\source\repos\EncReader\EncReader\bin\Debug\EncReader.exe
+C:\Users\bdas\source\repos\EncReader\EncReader\bin\Debug\EncReader.pdb
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.csprojAssemblyReference.cache
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.Properties.Resources.resources
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.csproj.GenerateResource.cache
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.csproj.CoreCompileInputs.cache
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.exe
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.pdb
+C:\Users\bdas\source\repos\EncReader\EncReader\obj\Debug\EncReader.EncReader.resources
