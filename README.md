@@ -1,5 +1,6 @@
 # MyPad
-A simple text editor just like Microsoft Notepad.exe. Written and designed in C#.
+
+Just a simple text editor just like Notepad. Written and designed in C# and Qt.
 
 ![N|Solid](https://raw.githubusercontent.com/dbarshan/MyPad/master/Screenshot/MyPad.png)
 
