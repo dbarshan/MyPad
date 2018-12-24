@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>746</width>
-    <height>638</height>
+    <width>759</width>
+    <height>647</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MyPad</string>
@@ -18,32 +24,49 @@
     <normaloff>../../Desktop/myPad4.ico</normaloff>../../Desktop/myPad4.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPlainTextEdit" name="plainTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>746</width>
-      <height>591</height>
-     </rect>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
     </property>
-    <property name="font">
-     <font>
-      <family>Consolas</family>
-      <pointsize>11</pointsize>
-     </font>
+    <property name="leftMargin">
+     <number>0</number>
     </property>
-    <property name="lineWrapMode">
-     <enum>QPlainTextEdit::NoWrap</enum>
+    <property name="topMargin">
+     <number>0</number>
     </property>
-   </widget>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QPlainTextEdit" name="plainTextEdit">
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="lineWrapMode">
+       <enum>QPlainTextEdit::NoWrap</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>746</width>
+     <width>759</width>
      <height>21</height>
     </rect>
    </property>
@@ -261,6 +284,9 @@
    <property name="text">
     <string>Select All</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
    <property name="shortcutVisibleInContextMenu">
     <bool>true</bool>
    </property>
@@ -268,6 +294,12 @@
   <action name="actionTime_Date">
    <property name="text">
     <string>Time/Date</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionView_Help">
@@ -289,6 +321,9 @@
    </property>
   </action>
   <action name="actionWord_Wrap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Word Wrap</string>
    </property>

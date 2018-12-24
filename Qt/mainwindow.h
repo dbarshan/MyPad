@@ -15,6 +15,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void saveFileAction();
+    void openFileAction();
+    void statusBarToggle();
+    void wordWrapToggle();
+
 private:
     Ui::MainWindow *ui;
 };
