@@ -6,7 +6,9 @@
 
 editor::editor()
 {
-
+    wordWrap = false;
+    fileOpened = false;
+    fileSaved = false;
 }
 
 
@@ -30,4 +32,28 @@ bool editor::writeTextFile(const QString &filename, QString &content){
         out << content;
     }
    return true;
+}
+
+bool editor::isFileOpen(){
+    return fileOpened;
+}
+
+bool editor::isFileSaved(){
+    return fileSaved;
+}
+
+void editor::setFileOpened(bool s){
+    fileOpened = s;
+}
+
+void editor::setFileSaved(bool s){
+    fileSaved = s;
+}
+
+void editor::setOpenFileName(QString fname){
+    openFilename = fname;
+}
+
+QString editor::getOpenFileName(){
+    return openFilename;
 }

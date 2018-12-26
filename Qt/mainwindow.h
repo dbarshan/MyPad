@@ -16,10 +16,16 @@ public:
     ~MainWindow();
 
 private slots:
-    void saveFileAction();
+    void newFileAction();
     void openFileAction();
+    void saveFileAction();
+    void saveAsFileAction();
+    void pageSetupAction();
+    void printAction();
     void statusBarToggle();
     void wordWrapToggle();
+    void performSaveChangesCheck();
+    void textChanged();
 
 private:
     Ui::MainWindow *ui;
