@@ -5,7 +5,8 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
-
+//#include <QtPrintSupport/QPageSetupDialog>
+//#include <QtPrintSupport/QPrinter>
 
 editor e;
 
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(    ui->action_New,         &QAction::triggered,    this,   &MainWindow::newFileAction      );
     connect(    ui->action_Open,        &QAction::triggered,    this,   &MainWindow::openFileAction     );
     connect(    ui->action_Save,        &QAction::triggered,    this,   &MainWindow::saveFileAction     );
+    connect(    ui->actionPage_Setup,   &QAction::triggered,    this,   &MainWindow::pageSetupAction    );
     connect(    ui->actionStatus_Bar,   &QAction::triggered,    this,   &MainWindow::statusBarToggle    );
     connect(    ui->actionWord_Wrap,    &QAction::triggered,    this,   &MainWindow::wordWrapToggle     );
     connect(    ui->plainTextEdit,      SIGNAL(textChanged()),  this,   SLOT(textChanged())             );
@@ -158,7 +160,10 @@ void MainWindow::saveAsFileAction(){
 }
 
 void MainWindow::pageSetupAction(){
-
+//    QPrinter printer;
+//    QPageSetupDialog psd(&printer);
+//    if(psd.exec() != QDialog::Accepted)
+//        return;
 }
 
 void MainWindow::printAction(){
@@ -183,11 +188,14 @@ void MainWindow::wordWrapToggle(){
     if (e.wordWrap){
         e.wordWrap = false;
         ui->actionWord_Wrap->setChecked(false);
+        ui->plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
     }
     else{
         e.wordWrap = true;
         ui->actionWord_Wrap->setChecked(true);
+        ui->plainTextEdit->setLineWrapMode((QPlainTextEdit::WidgetWidth));
     }
+    statusBarToggle();
 }
 
 void MainWindow::textChanged(){
