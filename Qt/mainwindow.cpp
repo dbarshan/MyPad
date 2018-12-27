@@ -189,11 +189,13 @@ void MainWindow::wordWrapToggle(){
         e.wordWrap = false;
         ui->actionWord_Wrap->setChecked(false);
         ui->plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
+        ui->actionStatus_Bar->setEnabled(true);
     }
     else{
         e.wordWrap = true;
         ui->actionWord_Wrap->setChecked(true);
         ui->plainTextEdit->setLineWrapMode((QPlainTextEdit::WidgetWidth));
+        ui->actionStatus_Bar->setEnabled(false);
     }
     statusBarToggle();
 }
