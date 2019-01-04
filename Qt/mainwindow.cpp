@@ -5,8 +5,13 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
-//#include <QtPrintSupport/QPageSetupDialog>
-//#include <QtPrintSupport/QPrinter>
+#include <QFont>
+#include <QFontDialog>
+
+#include <QPageSetupDialog>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QIcon>
 
 editor e;
 
@@ -15,13 +20,50 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //----------------------- connect slots for File Menu actions ----------------------------------------
     connect(    ui->action_New,         &QAction::triggered,    this,   &MainWindow::newFileAction      );
     connect(    ui->action_Open,        &QAction::triggered,    this,   &MainWindow::openFileAction     );
     connect(    ui->action_Save,        &QAction::triggered,    this,   &MainWindow::saveFileAction     );
+    connect(    ui->actionSave_As,      &QAction::triggered,    this,   &MainWindow::saveAsFileAction   );
+
     connect(    ui->actionPage_Setup,   &QAction::triggered,    this,   &MainWindow::pageSetupAction    );
-    connect(    ui->actionStatus_Bar,   &QAction::triggered,    this,   &MainWindow::statusBarToggle    );
-    connect(    ui->actionWord_Wrap,    &QAction::triggered,    this,   &MainWindow::wordWrapToggle     );
+    connect(    ui->actionPrint,        &QAction::triggered,    this,   &MainWindow::printAction        );
+
+    connect(    ui->actionExit,         &QAction::triggered,    this,   &MainWindow::exitAction         );
+
+    //----------------------- connect slots for Edit Menu actions ----------------------------------------
+    connect(    ui->actionUndo,         &QAction::triggered,    this,   &MainWindow::undoAction         );
+
+    connect(    ui->actionCut,          &QAction::triggered,    this,   &MainWindow::cutAction          );
+    connect(    ui->actionCopy,         &QAction::triggered,    this,   &MainWindow::copyAction         );
+    connect(    ui->actionPaste,        &QAction::triggered,    this,   &MainWindow::pasteAction        );
+    connect(    ui->actionDelete,       &QAction::triggered,    this,   &MainWindow::deleteAction       );
+
+    connect(    ui->actionFind,         &QAction::triggered,    this,   &MainWindow::findAction         );
+    connect(    ui->actionFind_Next,    &QAction::triggered,    this,   &MainWindow::findNextAction     );
+    connect(    ui->actionReplace,      &QAction::triggered,    this,   &MainWindow::replaceAction      );
+    connect(    ui->actionGo_To,        &QAction::triggered,    this,   &MainWindow::gotoAction         );
+
+    connect(    ui->actionSelect_All,   &QAction::triggered,    this,   &MainWindow::selectAllAction    );
+    connect(    ui->actionTime_Date,    &QAction::triggered,    this,   &MainWindow::timeDateAction     );
+
+    //----------------------- connect slots for Format Menu actions ----------------------------------------
+    connect(    ui->actionWord_Wrap,    &QAction::triggered,    this,   &MainWindow::wordWrapToggleAction );
+    connect(    ui->actionFont,         &QAction::triggered,    this,   &MainWindow::fontSelectAction   );
+
+    //----------------------- connect slots for View Menu actions ----------------------------------------
+    connect(    ui->actionStatus_Bar,   &QAction::triggered,    this,   &MainWindow::statusBarToggleAction);
+
+    //----------------------- connect slots for Help Menu actions ----------------------------------------
+    connect(    ui->actionView_Help,    &QAction::triggered,    this,   &MainWindow::viewHelpAction     );
+    connect(    ui->actionAbout_MyPad,  &QAction::triggered,    this,   &MainWindow::aboutAction        );
+
+    //-------------------------other slots ---------------------------------------------------------------
     connect(    ui->plainTextEdit,      SIGNAL(textChanged()),  this,   SLOT(textChanged())             );
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -125,54 +167,146 @@ void MainWindow::saveFileAction(){
     //      yes -> if file saved?
     //          yes -> do nothing
     //          no  -> save file
-    //      no ->  if content blank?
-    //          yes -> do nothing
-    //          no ->  ask for save file name. save file.
+    //      no ->  ask for save file name. save file.
+
 
     if( e.isFileOpen() && e.isFileSaved())
         return;
 
-    if(!e.isFileOpen() && ui->plainTextEdit->toPlainText().isEmpty())
-        return;
-
     QString filename;
+
+    if(e.isFileOpen() && !e.isFileSaved()){
+        filename = e.getOpenFileName();
+    }
+
     if(!e.isFileOpen()){
+        QString filename;
         filename = QFileDialog::getSaveFileName(this,tr("Save File"),".",tr("Text Documents (*.txt)"));
         if ( filename.isEmpty())
             return;
         e.setOpenFileName(filename);
         e.setFileOpened(true);
     }
-    else{
-        filename = e.getOpenFileName();
-    }
 
     QString content = ui->plainTextEdit->toPlainText();
     e.writeTextFile(filename,content);
+    e.setFileSaved(true);
+}
+
+void MainWindow::saveAsFileAction(){
+    // SaveAs menu triggered
+    // ask for save file name. save file.
+    // close old file without saving.
+    // open new file
 
 
+    QString filename = QFileDialog::getSaveFileName(this,tr("Save File"),".",tr("Text Documents (*.txt)"));
+    if ( filename.isEmpty())
+        return;
+    QString content = ui->plainTextEdit->toPlainText();
+    e.writeTextFile(filename,content);
+
+    e.readTextFile(filename,content);
+    ui->plainTextEdit->document()->setPlainText(content);
+    e.setOpenFileName(filename);
+    e.setFileOpened(true);
     e.setFileSaved(true);
 
 }
 
-void MainWindow::saveAsFileAction(){
-
-}
-
 void MainWindow::pageSetupAction(){
-//    QPrinter printer;
-//    QPageSetupDialog psd(&printer);
-//    if(psd.exec() != QDialog::Accepted)
-//        return;
+    QPageSetupDialog psd(&printer);
+    if(psd.exec() != QDialog::Accepted)
+        return;
 }
 
 void MainWindow::printAction(){
 
+    QPrintDialog dialog(&printer, this);
+    dialog.setWindowTitle(tr("Print Document"));
+    if (ui->plainTextEdit->textCursor().hasSelection()){
+        dialog.addEnabledOption(QAbstractPrintDialog::PrintSelection);
+    }
+    if (dialog.exec() != QDialog::Accepted) {
+               return;
+    }
+
+
+    //QPrinter printer(QPrinter::HighResolution);
+    //printer.setOutputFileName("print.ps");
+    //QPainter painter;
+    //painter.begin(&printer);
+
+    //for (int page = 0; page < numberOfPages; ++page) {
+    //    // Use the painter to draw on the page.
+    //    if (page != lastPage)
+    //        printer.newPage();
+    //}
+
+    //painter.end();
 }
 
+void MainWindow::exitAction(){
+    this->close();
+}
 
+void MainWindow::undoAction(){
+    ui->plainTextEdit->undo();
+}
 
-void MainWindow::statusBarToggle(){
+void MainWindow::cutAction(){
+    ui->plainTextEdit->cut();
+}
+
+void MainWindow::copyAction(){
+    ui->plainTextEdit->copy();
+}
+
+void MainWindow::pasteAction(){
+    ui->plainTextEdit->paste();
+}
+
+void MainWindow::deleteAction(){
+    ui->plainTextEdit->textCursor().removeSelectedText();
+}
+
+void MainWindow::findAction(){
+
+}
+
+void MainWindow::findNextAction(){
+
+}
+
+void MainWindow::replaceAction(){
+
+}
+
+void MainWindow::gotoAction(){
+
+}
+
+void MainWindow::selectAllAction(){
+
+}
+
+void MainWindow::timeDateAction(){
+
+}
+
+void MainWindow::fontSelectAction(){
+    bool ok;
+    QFont font = ui->plainTextEdit->font();
+    font =  QFontDialog::getFont(&ok,font,this,"Font");
+    if(ok){
+        ui->plainTextEdit->setFont(font);
+    }
+    else{
+
+    }
+}
+
+void MainWindow::statusBarToggleAction(){
     if ( ui->statusBar->isVisible()){
         ui->statusBar->hide();
         ui->actionStatus_Bar->setChecked(false);
@@ -183,7 +317,7 @@ void MainWindow::statusBarToggle(){
     }
 }
 
-void MainWindow::wordWrapToggle(){
+void MainWindow::wordWrapToggleAction(){
 
     if (e.wordWrap){
         e.wordWrap = false;
@@ -197,8 +331,31 @@ void MainWindow::wordWrapToggle(){
         ui->plainTextEdit->setLineWrapMode((QPlainTextEdit::WidgetWidth));
         ui->actionStatus_Bar->setEnabled(false);
     }
-    statusBarToggle();
+    statusBarToggleAction();
 }
+
+void MainWindow::viewHelpAction(){
+
+}
+
+void MainWindow::aboutAction(){
+
+    QMessageBox msgBox;
+    QIcon icon;
+
+    msgBox.setWindowTitle("About MyPad");
+    msgBox.setWindowIcon(icon);
+
+    msgBox.setIconPixmap(QPixmap("C:\\users\\bdas\\Desktop\\myPad4.ico"));
+    msgBox.setText("MyPad is a simple Text editor.\n\n\nVersion: 1.0.0");
+    msgBox.exec();
+
+    QMessageBox messageBox;
+
+
+
+}
+
 
 void MainWindow::textChanged(){
     if(e.isFileSaved())
